@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Orphanage & Adoption Platform</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #111827;
+      color: white;
+      padding: 20px;
+    }
+
+    input, button {
+      margin: 5px;
+      padding: 5px;
+    }
+
+    button {
+      background: #22c55e;
+      border: none;
+      cursor: pointer;
+    }
+
+    .box {
+      margin-bottom: 20px;
+      padding: 10px;
+      background: #1f2937;
+    }
+
+    pre {
+      background: #0f172a;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Orphanage & Adoption Platform</h1>
+
+<div class="box">
+  <h2>Create Family</h2>
+  <input id="fname" placeholder="Name">
+  <input id="income" type="number" placeholder="Income">
+  <input id="experience" type="number" placeholder="Experience (years)">
+  <label>
+    Background Check
+    <input id="bg" type="checkbox">
+  </label>
+  <button onclick="createFamily()">Create</button>
+</div>
+
+<div class="box">
+  <h2>Create Child</h2>
+  <input id="cname" placeholder="Name">
+  <input id="age" type="number" placeholder="Age">
+  <label>
+    Special Needs
+    <input id="needs" type="checkbox">
+  </label>
+  <button onclick="createChild()">Create</button>
+</div>
+
+<div class="box">
+  <h2>Match</h2>
+  <input id="familyId" placeholder="Family ID">
+  <input id="childId" placeholder="Child ID">
+  <button onclick="match()">Match</button>
+</div>
+
+<pre id="result"></pre>
+
+<script>
+async function createFamily() {
+  const res = await fetch("/family", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      name: fname.value,
+      income: Number(income.value),
+      experience: Number(experience.value),
+      backgroundCheck: bg.checked
+    })
+  });
+  document.getElementById("result").textContent = await res.text();
+}
+
+async function createChild() {
+  const res = await fetch("/child", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      name: cname.value,
+      age: Number(age.value),
+      specialNeeds: needs.checked
+    })
+  });
+  document.getElementById("result").textContent = await res.text();
+}
+
+async function match() {
+  const res = await fetch("/match", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      familyId: familyId.value,
+      childId: childId.value
+    })
+  });
+  document.getElementById("result").textContent = await res.text();
+}
+</script>
+
+</body>
+</html>
